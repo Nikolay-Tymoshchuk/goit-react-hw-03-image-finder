@@ -1,5 +1,4 @@
 import Scroll from 'react-scroll';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './searchbar';
 import Loader from './loader';
@@ -7,6 +6,7 @@ import ImageGallery from './gallery';
 import Button from './button';
 import ToTop from './buttonUp';
 import Modal from './modal';
+import { ToastContainer, toast } from 'react-toastify';
 import { getImages } from 'service/service';
 import { Component } from 'react';
 import { Container } from './App.styled';
@@ -21,7 +21,6 @@ export class App extends Component {
     isLoading: false,
     isDataReady: false,
     totalPages: 1,
-    showModal: false,
     dataForModal: null,
   };
 
@@ -49,13 +48,12 @@ export class App extends Component {
 
   handleModalOpen = e => {
     this.setState({
-      showModal: true,
       dataForModal: { image: e.target.dataset.modal, alt: e.target.alt },
     });
   };
 
   handleModalClose = () => {
-    this.setState({ showModal: false, dataForModal: null });
+    this.setState({ dataForModal: null });
   };
 
   async handleFetch(query, page) {
@@ -79,15 +77,8 @@ export class App extends Component {
   }
 
   render() {
-    const {
-      page,
-      totalPages,
-      hits,
-      isLoading,
-      isDataReady,
-      showModal,
-      dataForModal,
-    } = this.state;
+    const { page, totalPages, hits, isLoading, isDataReady, dataForModal } =
+      this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleSubmit} />
@@ -99,7 +90,7 @@ export class App extends Component {
           <Button onClick={this.handleLoadMore} />
         )}
         {page > 2 && <ToTop />}
-        {showModal && (
+        {dataForModal && (
           <Modal onClose={this.handleModalClose}>
             <img src={dataForModal.image} alt={dataForModal.alt} />
           </Modal>
