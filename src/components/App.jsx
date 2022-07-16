@@ -58,9 +58,9 @@ export class App extends Component {
   };
 
   async handleFetch(query, page) {
+    this.setState({ isLoading: true });
     try {
       const { hits, totalPages } = await getImages(query, page);
-      this.setState({ isLoading: true });
       if (totalPages === 0) {
         this.setState({ isDataReady: false });
         toast.error('No results found');
