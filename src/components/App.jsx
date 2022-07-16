@@ -28,6 +28,7 @@ export class App extends Component {
   componentDidUpdate(_, prevState) {
     const { query, page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
+      this.setState({ isLoading: true });
       this.handleFetch(query, page);
     }
   }
@@ -58,7 +59,6 @@ export class App extends Component {
   };
 
   async handleFetch(query, page) {
-    this.setState({ isLoading: true });
     try {
       const { hits, totalPages } = await getImages(query, page);
       if (totalPages === 0) {
